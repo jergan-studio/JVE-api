@@ -1,141 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>JVE API Docs</title>
 
-<title>JVE API Documentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
 
-<meta name="description" content="Official documentation for JVE API (Jergan Verse Environment). Learn JIV core commands, Interactive.JVE scripting, Canvas, Alert, and NewTab system.">
+    a {
+      color: #4da3ff;
+      text-decoration: none;
+    }
 
-<meta name="robots" content="index, follow">
+    .box {
+      background: #1a1a1a;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
 
-<meta name="google-site-verification" content="WABRExcIFQ5-O47NRepSAIKR9_5kh5EO8CYujSeSM3E" />
+    code {
+      background: #222;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
 
-<style>
-body {
-  margin: 0;
-  font-family: monospace;
-  background: #0d0d0d;
-  color: #00ff88;
-}
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
 
-header {
-  padding: 30px;
-  text-align: center;
-  border-bottom: 2px solid #00ff88;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 2.5rem;
-}
-
-header p {
-  color: #aaa;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.card {
-  background: #111;
-  border: 1px solid #222;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-}
-
-h2 {
-  color: #00ff88;
-}
-
-code {
-  color: #00ff88;
-}
-
-pre {
-  background: #000;
-  padding: 10px;
-  border: 1px solid #333;
-  overflow-x: auto;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #555;
-  border-top: 1px solid #222;
-}
-</style>
-
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <h1>JVE API</h1>
-  <p>Jergan Verse Environment — Scripting & Command System</p>
-</header>
+<h1>⚡ JVE API Documentation</h1>
+<p>Browser-based command runtime API for HTML & JS interaction.</p>
 
-<div class="container">
+<!-- 🔍 SEARCH BAR -->
+<input id="search" placeholder="Search docs (commands, html, settings...)" />
 
-  <div class="card">
-    <h2>What is JVE?</h2>
-    <p>
-      JVE API is a lightweight scripting system powered by JIV Core Commands.
-      It is designed for simple scripting, canvas drawing, and interactive apps.
-    </p>
-  </div>
-
-  <div class="card">
-    <h2>Core Object: JIV</h2>
-    <p>JIV is the main command API used inside JVE.</p>
-
-<pre><code>JIV.Alert("browser")("Hello World")
-JIV.NewTab("canvas")
-JIV.Canvas("draw", "rect 10 10 100 100")</code></pre>
-
-  </div>
-
-  <div class="card">
-    <h2>Interactive.JVE Example</h2>
-
-<pre><code>Alert(browser) Hello JVE
-
-NewTab(canvas)
-
-Canvas(draw, rect 50 50 120 80)
-
-Canvas(draw, text Welcome)</code></pre>
-
-  </div>
-
-  <div class="card">
-    <h2>Features</h2>
-    <ul>
-      <li>Alert System</li>
-      <li>Canvas Drawing Engine</li>
-      <li>Window / Tab System</li>
-      <li>Simple Script Format (.JVE)</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>Next Up</h2>
-    <p>
-      JVE will expand into IDE support, modules, and real-time scripting tools.
-    </p>
-  </div>
-
+<div class="box doc-item">
+  <h2>📦 Quick Start</h2>
+  <code>&lt;script src="jiv.core.js"&gt;&lt;/script&gt;</code><br>
+  <code>&lt;script src="jve.api.js"&gt;&lt;/script&gt;</code>
 </div>
 
-<footer>
-  JVE API • Jergan Studio
-</footer>
+<div class="box doc-item">
+  <h2>🚀 Run Command Example</h2>
+  <code>JVE.run("alert", ["Hello World"]);</code>
+</div>
+
+<div class="box doc-item">
+  <h2>📘 Core Commands</h2>
+  <p>var, add, set</p>
+</div>
+
+<div class="box doc-item">
+  <h2>🎨 HTML Commands</h2>
+  <p>alert, draw</p>
+</div>
+
+<div class="box doc-item">
+  <h2>⚙️ Settings</h2>
+  <p>multiplayer</p>
+</div>
+
+<div class="box doc-item">
+  <h2>📚 Examples</h2>
+  <p>Basic usage scripts</p>
+</div>
+
+<script>
+const search = document.getElementById("search");
+const items = document.querySelectorAll(".doc-item");
+
+search.addEventListener("input", function () {
+  const value = this.value.toLowerCase();
+
+  items.forEach(item => {
+    const text = item.innerText.toLowerCase();
+
+    if (text.includes(value)) {
+      item.classList.remove("hidden");
+    } else {
+      item.classList.add("hidden");
+    }
+  });
+});
+</script>
 
 </body>
 </html>
