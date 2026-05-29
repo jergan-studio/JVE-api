@@ -13,13 +13,22 @@ body {
   padding: 20px;
 }
 
-/* Links */
-a {
-  color: #4da3ff;
-  text-decoration: none;
+h1 {
+  margin-bottom: 5px;
 }
 
-/* Boxes */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background: #111;
+  color: white;
+  font-size: 14px;
+}
+
 .box {
   background: #1a1a1a;
   padding: 15px;
@@ -27,34 +36,23 @@ a {
   border-radius: 8px;
 }
 
-/* Code */
 code {
   background: #222;
-  padding: 2px 6px;
+  padding: 3px 6px;
   border-radius: 4px;
+  display: inline-block;
+  margin-top: 5px;
 }
 
-/* Top search */
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  background: #111;
-  color: white;
-}
-
-/* hide items */
-.hidden {
-  display: none;
+/* results container */
+#results {
+  margin-top: 10px;
 }
 
 /* right click menu */
 #contextMenu {
   position: fixed;
-  width: 220px;
+  width: 240px;
   background: #1a1a1a;
   border: 1px solid #333;
   padding: 10px;
@@ -70,6 +68,10 @@ input {
   background: #111;
   color: white;
 }
+
+.hidden {
+  display: none;
+}
 </style>
 </head>
 
@@ -79,62 +81,97 @@ input {
 <p>Browser-based command runtime API for HTML & JS interaction.</p>
 
 <!-- MAIN SEARCH -->
-<input id="search" placeholder="Search docs..." />
+<input id="search" placeholder="Search JVE commands (var, draw, alert...)" />
 
-<div class="box doc-item">
-<h2>📦 Quick Start</h2>
-<code>&lt;script src="jiv.core.js"&gt;&lt;/script&gt;</code><br>
-<code>&lt;script src="jve.api.js"&gt;&lt;/script&gt;</code>
-</div>
-
-<div class="box doc-item">
-<h2>🚀 Run Command</h2>
-<code>JVE.run("alert", ["Hello"]);</code>
-</div>
-
-<div class="box doc-item">
-<h2>🧠 Core Commands</h2>
-<p>var, add, set</p>
-</div>
-
-<div class="box doc-item">
-<h2>🎨 HTML Commands</h2>
-<p>alert, draw</p>
-</div>
-
-<div class="box doc-item">
-<h2>⚙️ Settings</h2>
-<p>multiplayer</p>
-</div>
-
-<div class="box doc-item">
-<h2>📚 Examples</h2>
-<p>Basic scripts and usage</p>
+<!-- RESULTS -->
+<div id="results" class="box">
+  <p>Type to search JVE commands...</p>
 </div>
 
 <!-- RIGHT CLICK MENU -->
 <div id="contextMenu" class="hidden">
-<input id="ctxSearch" placeholder="Search JVE docs..." />
+  <input id="ctxSearch" placeholder="Search JVE docs..." />
 </div>
 
 <script>
-const items = document.querySelectorAll(".doc-item");
+/* =========================
+   COMMAND DATABASE
+========================= */
+const COMMANDS = [
+  {
+    name: "var",
+    type: "core",
+    desc: "Creates a variable in JVE memory",
+    usage: "var health 100"
+  },
+  {
+    name: "add",
+    type: "core",
+    desc: "Adds value to a variable",
+    usage: "add health 10"
+  },
+  {
+    name: "set",
+    type: "core",
+    desc: "Sets variables or engine settings (like multiplayer)",
+    usage: "set multiplayer true"
+  },
+  {
+    name: "alert",
+    type: "html",
+    desc: "Shows browser alert popup",
+    usage: "alert Hello World"
+  },
+  {
+    name: "draw",
+    type: "html",
+    desc: "Draws shapes on the screen",
+    usage: "draw circle 0 0 100 100"
+  }
+];
 
-/* -------------------------
-   MAIN SEARCH BAR
---------------------------*/
-document.getElementById("search").addEventListener("input", function () {
-  const value = this.value.toLowerCase();
+/* =========================
+   SEARCH SYSTEM
+========================= */
+const search = document.getElementById("search");
+const results = document.getElementById("results");
 
-  items.forEach(item => {
-    const text = item.innerText.toLowerCase();
-    item.style.display = text.includes(value) ? "block" : "none";
-  });
+function render(list) {
+  if (list.length === 0) {
+    results.innerHTML = "<p>No commands found.</p>";
+    return;
+  }
+
+  results.innerHTML = list.map(cmd => `
+    <div class="box">
+      <h2>${cmd.name}</h2>
+      <p><b>Type:</b> ${cmd.type}</p>
+      <p>${cmd.desc}</p>
+      <code>${cmd.usage}</code>
+    </div>
+  `).join("");
+}
+
+search.addEventListener("input", function () {
+  const value = this.value.toLowerCase().trim();
+
+  if (!value) {
+    results.innerHTML = "<p>Type to search JVE commands...</p>";
+    return;
+  }
+
+  const matches = COMMANDS.filter(cmd =>
+    cmd.name.includes(value) ||
+    cmd.desc.toLowerCase().includes(value) ||
+    cmd.type.includes(value)
+  );
+
+  render(matches);
 });
 
-/* -------------------------
-   RIGHT CLICK MENU
---------------------------*/
+/* =========================
+   RIGHT CLICK SEARCH
+========================= */
 const menu = document.getElementById("contextMenu");
 const ctxSearch = document.getElementById("ctxSearch");
 
@@ -152,16 +189,15 @@ document.addEventListener("click", () => {
   menu.classList.add("hidden");
 });
 
-/* -------------------------
-   CONTEXT SEARCH FILTER
---------------------------*/
 ctxSearch.addEventListener("input", function () {
-  const value = this.value.toLowerCase();
+  const value = this.value.toLowerCase().trim();
 
-  items.forEach(item => {
-    const text = item.innerText.toLowerCase();
-    item.style.display = text.includes(value) ? "block" : "none";
-  });
+  const matches = COMMANDS.filter(cmd =>
+    cmd.name.includes(value) ||
+    cmd.desc.toLowerCase().includes(value)
+  );
+
+  render(matches);
 });
 </script>
 
