@@ -6,246 +6,136 @@
 
 <title>JVE API Documentation</title>
 
-<meta name="description" content="Official JVE API documentation. Learn JIV Core Commands, Alert, NewTab, Canvas, and Interactive.JVE scripting.">
-
-<meta name="keywords" content="JVE API,JIV,Jergan Verse Environment,Interactive.JVE,scripting,canvas API,commands">
+<meta name="description" content="Official documentation for JVE API (Jergan Verse Environment). Learn JIV core commands, Interactive.JVE scripting, Canvas, Alert, and NewTab system.">
 
 <meta name="robots" content="index, follow">
 
-<meta name="google-site-verification" content="-FtV4b1Ir-FmSioLjx8wf_VLV_Q9ctn2fFFRNsUCoS8" />
+<meta name="google-site-verification" content="WABRExcIFQ5-O47NRepSAIKR9_5kh5EO8CYujSeSM3E" />
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+body {
+  margin: 0;
+  font-family: monospace;
+  background: #0d0d0d;
+  color: #00ff88;
 }
 
-body{
-    background:#0d0d0d;
-    color:#e0e0e0;
-    font-family:Arial,Helvetica,sans-serif;
-    line-height:1.6;
+header {
+  padding: 30px;
+  text-align: center;
+  border-bottom: 2px solid #00ff88;
 }
 
-header{
-    background:#111;
-    border-bottom:2px solid #00ff88;
-    padding:30px;
-    text-align:center;
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
 }
 
-header h1{
-    color:#00ff88;
-    font-size:3rem;
+header p {
+  color: #aaa;
 }
 
-header p{
-    color:#aaa;
-    margin-top:10px;
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
-nav{
-    background:#181818;
-    padding:15px;
-    text-align:center;
+.card {
+  background: #111;
+  border: 1px solid #222;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
 }
 
-nav a{
-    color:#00ff88;
-    text-decoration:none;
-    margin:0 15px;
-    font-weight:bold;
+h2 {
+  color: #00ff88;
 }
 
-nav a:hover{
-    text-decoration:underline;
+code {
+  color: #00ff88;
 }
 
-.container{
-    max-width:1000px;
-    margin:auto;
-    padding:30px;
+pre {
+  background: #000;
+  padding: 10px;
+  border: 1px solid #333;
+  overflow-x: auto;
 }
 
-.card{
-    background:#161616;
-    border:1px solid #2a2a2a;
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:20px;
-}
-
-.card h2{
-    color:#00ff88;
-    margin-bottom:10px;
-}
-
-pre{
-    background:#0a0a0a;
-    border:1px solid #333;
-    padding:15px;
-    border-radius:8px;
-    overflow:auto;
-    margin-top:10px;
-}
-
-code{
-    color:#00ff88;
-}
-
-footer{
-    text-align:center;
-    padding:25px;
-    border-top:1px solid #222;
-    margin-top:40px;
-    color:#777;
-}
-
-.version{
-    color:#00ff88;
-    font-weight:bold;
-}
-
-.search-box{
-    width:100%;
-    padding:12px;
-    margin-top:15px;
-    background:#111;
-    border:1px solid #333;
-    color:white;
-    border-radius:6px;
-}
-
-.command{
-    margin-top:15px;
-    padding:10px;
-    border-left:4px solid #00ff88;
-    background:#121212;
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  border-top: 1px solid #222;
 }
 </style>
+
 </head>
+
 <body>
 
 <header>
-    <h1>JVE API</h1>
-    <p>Jergan Verse Environment API Documentation</p>
-    <p class="version">Version 1.0</p>
+  <h1>JVE API</h1>
+  <p>Jergan Verse Environment — Scripting & Command System</p>
 </header>
-
-<nav>
-    <a href="#getting-started">Getting Started</a>
-    <a href="#commands">Commands</a>
-    <a href="#interactive">Interactive.JVE</a>
-    <a href="#examples">Examples</a>
-</nav>
 
 <div class="container">
 
-    <div class="card">
-        <h2>Welcome</h2>
-        <p>
-            JVE API is a lightweight scripting environment powered by JIV Core Commands.
-            It provides alert systems, canvas rendering, tabs, and interactive scripting.
-        </p>
-    </div>
+  <div class="card">
+    <h2>What is JVE?</h2>
+    <p>
+      JVE API is a lightweight scripting system powered by JIV Core Commands.
+      It is designed for simple scripting, canvas drawing, and interactive apps.
+    </p>
+  </div>
 
-    <div class="card" id="getting-started">
-        <h2>Getting Started</h2>
+  <div class="card">
+    <h2>Core Object: JIV</h2>
+    <p>JIV is the main command API used inside JVE.</p>
 
-<pre><code>&lt;script src="jiv.core.js"&gt;&lt;/script&gt;
-&lt;script src="jve.api.js"&gt;&lt;/script&gt;</code></pre>
+<pre><code>JIV.Alert("browser")("Hello World")
+JIV.NewTab("canvas")
+JIV.Canvas("draw", "rect 10 10 100 100")</code></pre>
 
-        <p style="margin-top:15px;">
-            After loading the runtime, JIV commands become available.
-        </p>
-    </div>
+  </div>
 
-    <div class="card" id="commands">
-        <h2>Core Commands</h2>
-
-        <input
-            type="text"
-            id="search"
-            class="search-box"
-            placeholder="Search commands..."
-        >
-
-        <div class="command">
-            <h3>Alert()</h3>
-            <p>Displays a browser alert.</p>
-
-<pre><code>Alert(browser)("Hello World")</code></pre>
-        </div>
-
-        <div class="command">
-            <h3>NewTab()</h3>
-            <p>Creates a new canvas tab.</p>
-
-<pre><code>NewTab(canvas)</code></pre>
-        </div>
-
-        <div class="command">
-            <h3>Canvas()</h3>
-            <p>Draws objects on a canvas.</p>
-
-<pre><code>Canvas(draw, rect 50 50 100 100)</code></pre>
-        </div>
-    </div>
-
-    <div class="card" id="interactive">
-        <h2>Interactive.JVE</h2>
-
-        <p>Main script format used by JVE API.</p>
+  <div class="card">
+    <h2>Interactive.JVE Example</h2>
 
 <pre><code>Alert(browser) Hello JVE
 
 NewTab(canvas)
 
-Canvas(draw, rect 50 50 100 100)
+Canvas(draw, rect 50 50 120 80)
 
-Canvas(draw, text Hello World)</code></pre>
+Canvas(draw, text Welcome)</code></pre>
 
-    </div>
+  </div>
 
-    <div class="card" id="examples">
-        <h2>Example</h2>
+  <div class="card">
+    <h2>Features</h2>
+    <ul>
+      <li>Alert System</li>
+      <li>Canvas Drawing Engine</li>
+      <li>Window / Tab System</li>
+      <li>Simple Script Format (.JVE)</li>
+    </ul>
+  </div>
 
-<pre><code>Alert(browser)("Welcome")
-
-NewTab(canvas)
-
-Canvas(draw, clear)
-
-Canvas(draw, rect 20 20 120 80)
-
-Canvas(draw, text JVE Works)</code></pre>
-
-    </div>
+  <div class="card">
+    <h2>Next Up</h2>
+    <p>
+      JVE will expand into IDE support, modules, and real-time scripting tools.
+    </p>
+  </div>
 
 </div>
 
 <footer>
-    JVE API Documentation • Jergan Studio
+  JVE API • Jergan Studio
 </footer>
-
-<script>
-const search = document.getElementById("search");
-
-search.addEventListener("input", () => {
-    const value = search.value.toLowerCase();
-
-    document.querySelectorAll(".command").forEach(cmd => {
-        const text = cmd.innerText.toLowerCase();
-
-        if(text.includes(value)){
-            cmd.style.display = "block";
-        }else{
-            cmd.style.display = "none";
-        }
-    });
-});
-</script>
 
 </body>
 </html>
