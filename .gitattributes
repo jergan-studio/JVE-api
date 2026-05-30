@@ -1,2 +1,9 @@
+# Treat JVE scripts as JavaScript for GitHub language stats
 *.jve linguist-language=JavaScript
-*.jve linguist-detectable=false
+
+# Optional: keep docs clean
+docs/* linguist-documentation=true
+
+# Ignore generated or runtime noise (optional)
+node_modules/* linguist-vendored
+runtime/* linguist-vendored
