@@ -1,27 +1,39 @@
 class Executor {
-  constructor(jve) {
+  constructor(jve, env) {
     this.jve = jve;
+    this.env = env;
   }
 
-  run(parsedScript) {
-    for (const line of parsedScript) {
-      const { command, args } = line;
+  resolve(value) {
+    if (this.env.has(value)) {
+      return this.env.get(value);
+    }
+    return value;
+  }
 
-      const data = this.mapArgs(args);
+  run(parsed) {
+    for (const line of parsed) {
+      const cmd = line.command;
+      const args = line.args.map(a => this.resolve(a));
 
-      this.jve.command(command, data);
+      this.execute(cmd, args);
     }
   }
 
-  mapArgs(args) {
-    // simple rule:
-    // first arg becomes "message" or "text"
-    if (!args || args.length === 0) return {};
+  execute(cmd, args) {
+    // VARIABLE SYSTEM
+    if (cmd === "set") {
+      this.env.set(args[0], args[1]);
+      return;
+    }
 
-    return {
+    // NORMAL COMMANDS
+    const data = {
       message: args[0],
       text: args[0]
     };
+
+    this.jve.command(cmd, data);
   }
 }
 
