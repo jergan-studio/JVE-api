@@ -2,25 +2,25 @@ class Parser {
   parse(script) {
     const lines = script.split("\n");
 
-    const instructions = [];
+    const output = [];
 
-    for (let lineNumber = 0; lineNumber < lines.length; lineNumber++) {
-      const raw = lines[lineNumber].trim();
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i].trim();
 
-      // Ignore blanks
+      // skip empty lines
       if (!raw) continue;
 
-      // Ignore comments
+      // skip comments
       if (raw.startsWith("#")) continue;
 
-      instructions.push({
-        line: lineNumber + 1,
+      output.push({
+        line: i + 1,
         raw,
         tokens: this.tokenize(raw)
       });
     }
 
-    return instructions;
+    return output;
   }
 
   tokenize(line) {

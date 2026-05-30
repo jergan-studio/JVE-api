@@ -1,78 +1,49 @@
 class Executor {
-  constructor(jve, environment) {
+  constructor(jve, env) {
     this.jve = jve;
-    this.environment = environment;
+    this.env = env;
   }
 
   resolve(value) {
-    if (this.environment.has(value)) {
-      return this.environment.get(value);
+    if (this.env.has(value)) {
+      return this.env.get(value);
     }
-
     return value;
   }
 
-  executeInstruction(instruction) {
-    const { line, tokens } = instruction;
+  run(lines) {
+    for (const line of lines) {
+      const tokens = line.tokens || line.split(" ");
 
-    const command = tokens[0];
+      const cmd = tokens[0];
 
-    try {
-      switch (command) {
+      // -------------------------
+      // VARIABLE SYSTEM
+      // -------------------------
+      if (cmd === "set") {
+        const name = tokens[1];
+        const value = tokens.slice(2).join(" ").replace(/"/g, "");
 
-        // -----------------
-        // VARIABLES
-        // -----------------
-
-        case "set": {
-          const name = tokens[1];
-
-          if (!name) {
-            throw new Error("Missing variable name");
-          }
-
-          const value =
-            tokens.slice(2).join(" ");
-
-          this.environment.set(name, value);
-
-          break;
-        }
-
-        case "echo": {
-          const value =
-            this.resolve(tokens.slice(1).join(" "));
-
-          console.log(value);
-
-          break;
-        }
-
-        // -----------------
-        // ENGINE COMMANDS
-        // -----------------
-
-        default: {
-          const argument =
-            this.resolve(tokens.slice(1).join(" "));
-
-          this.jve.command(command, {
-            message: argument,
-            text: argument
-          });
-        }
+        this.env.set(name, value);
+        continue;
       }
 
-    } catch (err) {
-      console.error(
-        `[JVE ERROR] Line ${line}: ${err.message}`
-      );
-    }
-  }
+      if (cmd === "echo") {
+        const value = tokens.slice(1).join(" ").replace(/"/g, "");
 
-  run(instructions) {
-    for (const instruction of instructions) {
-      this.executeInstruction(instruction);
+        console.log(this.resolve(value));
+        continue;
+      }
+
+      // -------------------------
+      // ENGINE COMMANDS
+      // -------------------------
+      const data = {
+        message: tokens.slice(1).join(" ").replace(/"/g, ""),
+        text: tokens.slice(1).join(" ").replace(/"/g, "")
+      };
+
+      this.jve.runCommandLine(cmd, data);
     }
   }
 }
