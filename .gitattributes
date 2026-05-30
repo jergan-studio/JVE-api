@@ -1,2 +1,2 @@
 *.jve linguist-language=JavaScript
-*.jve linguist-detectable=true
+*.jve linguist-detectable=false
