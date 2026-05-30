@@ -1,0 +1,6 @@
+set name "JVE_ENGINE"
+
+alert "Starting system"
+broadcast "Welcome to JVE"
+
+echo name
