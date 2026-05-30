@@ -1,39 +1,79 @@
 class Executor {
-  constructor(jve, env) {
+  constructor(jve, environment) {
     this.jve = jve;
-    this.env = env;
+    this.environment = environment;
   }
 
   resolve(value) {
-    if (this.env.has(value)) {
-      return this.env.get(value);
+    if (this.environment.has(value)) {
+      return this.environment.get(value);
     }
+
     return value;
   }
 
-  run(parsed) {
-    for (const line of parsed) {
-      const cmd = line.command;
-      const args = line.args.map(a => this.resolve(a));
+  executeInstruction(instruction) {
+    const { line, tokens } = instruction;
 
-      this.execute(cmd, args);
+    const command = tokens[0];
+
+    try {
+      switch (command) {
+
+        // -----------------
+        // VARIABLES
+        // -----------------
+
+        case "set": {
+          const name = tokens[1];
+
+          if (!name) {
+            throw new Error("Missing variable name");
+          }
+
+          const value =
+            tokens.slice(2).join(" ");
+
+          this.environment.set(name, value);
+
+          break;
+        }
+
+        case "echo": {
+          const value =
+            this.resolve(tokens.slice(1).join(" "));
+
+          console.log(value);
+
+          break;
+        }
+
+        // -----------------
+        // ENGINE COMMANDS
+        // -----------------
+
+        default: {
+          const argument =
+            this.resolve(tokens.slice(1).join(" "));
+
+          this.jve.command(command, {
+            message: argument,
+            text: argument
+          });
+        }
+      }
+
+    } catch (err) {
+      console.error(
+        `[JVE ERROR] Line ${line}: ${err.message}`
+      );
     }
   }
 
-  execute(cmd, args) {
-    // VARIABLE SYSTEM
-    if (cmd === "set") {
-      this.env.set(args[0], args[1]);
-      return;
+  run(instructions) {
+    for (const instruction of instructions) {
+      this.executeInstruction(instruction);
     }
-
-    // NORMAL COMMANDS
-    const data = {
-      message: args[0],
-      text: args[0]
-    };
-
-    this.jve.command(cmd, data);
   }
 }
 
