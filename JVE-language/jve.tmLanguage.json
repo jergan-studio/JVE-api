@@ -1,0 +1,18 @@
+{
+  "scopeName": "source.jve",
+  "patterns": [
+    {
+      "match": "\\b(set|echo|alert|broadcast|if|repeat|func|end)\\b",
+      "name": "keyword.control.jve"
+    },
+    {
+      "match": "\".*?\"",
+      "name": "string.quoted.double.jve"
+    },
+    {
+      "match": "#.*$",
+      "name": "comment.line.jve"
+    }
+  ],
+  "name": "JVE"
+}
