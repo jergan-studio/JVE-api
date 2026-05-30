@@ -6,14 +6,35 @@ class ScriptEngine {
   constructor(jve) {
     this.jve = jve;
 
-    this.env = new Environment();
-    this.parser = new Parser();
-    this.executor = new Executor(jve, this.env);
+    this.environment =
+      new Environment();
+
+    this.parser =
+      new Parser();
+
+    this.executor =
+      new Executor(
+        jve,
+        this.environment
+      );
   }
 
   run(script) {
-    const parsed = this.parser.parse(script);
+    const parsed =
+      this.parser.parse(script);
+
     this.executor.run(parsed);
+  }
+
+  runLine(line) {
+    const parsed =
+      this.parser.parse(line);
+
+    this.executor.run(parsed);
+  }
+
+  getEnvironment() {
+    return this.environment;
   }
 }
 
