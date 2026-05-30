@@ -1,29 +1,120 @@
-const fs = require("fs");
-const path = require("path");
+const EventBus = require("./engine/EventBus");
+const JVECore = require("./engine/JVECore");
 
-class FileRunner {
-  constructor(scriptEngine) {
-    this.scriptEngine = scriptEngine;
-  }
+const ServerManager = require("./runtime/ServerManager");
+const ScriptEngine = require("./runtime/ScriptEngine");
+const FileRunner = require("./runtime/FileRunner");
+const startConsole = require("./runtime/console");
 
-  run(filePath) {
-    const absolute =
-      path.resolve(filePath);
+// Commands
+const alert = require("./api/alert");
+const broadcast = require("./api/broadcast");
 
-    if (!fs.existsSync(absolute)) {
-      throw new Error(
-        `Script not found: ${absolute}`
-      );
-    }
+// Plugins
+const loadPlugins = require("./plugins");
 
-    const script =
-      fs.readFileSync(
-        absolute,
-        "utf8"
-      );
+// ======================
+// CORE SYSTEMS
+// ======================
 
-    this.scriptEngine.run(script);
-  }
+const events = new EventBus();
+const servers = new ServerManager();
+
+const jve = new JVECore({
+  events,
+  servers
+});
+
+// ======================
+// SCRIPT SYSTEM
+// ======================
+
+const scriptEngine =
+  new ScriptEngine(jve);
+
+const fileRunner =
+  new FileRunner(scriptEngine);
+
+// ======================
+// SERVERS
+// ======================
+
+servers.add("US-1");
+servers.add("EU-1");
+servers.add("DEV");
+
+// ======================
+// COMMANDS
+// ======================
+
+jve.register("alert", alert);
+jve.register("broadcast", broadcast);
+
+// ======================
+// EVENTS
+// ======================
+
+events.on("command", ({ name, data }) => {
+  console.log(
+    `[EVENT] ${name}`,
+    data
+  );
+});
+
+events.on("error", (error) => {
+  console.error(
+    "[JVE ERROR]",
+    error
+  );
+});
+
+// ======================
+// PLUGINS
+// ======================
+
+loadPlugins(jve);
+
+// ======================
+// STARTUP SCRIPT
+// ======================
+
+try {
+  fileRunner.run("./startup.jve");
+}
+catch (err) {
+  console.log(
+    "[SCRIPT]",
+    err.message
+  );
 }
 
-module.exports = FileRunner;
+// ======================
+// TEST SCRIPT
+// ======================
+
+scriptEngine.run(`
+set game JVE
+
+echo game
+
+alert "JVE Script Loaded"
+
+broadcast "Phase 3 Active"
+`);
+
+// ======================
+// INTERACTIVE CONSOLE
+// ======================
+
+startConsole(jve);
+
+// ======================
+// READY MESSAGE
+// ======================
+
+console.log("");
+console.log("=================================");
+console.log("JVE Phase 3 Runtime Started");
+console.log("=================================");
+console.log("Servers:", servers.servers.size);
+console.log("");
